@@ -3,41 +3,41 @@ const dateFormat = require('../utils/dateFormat');
 
 const PizzaSchema = new Schema(
 {
-    pizzaName: {
-        type: String
-    },
-    createdBy: {
-        type: String
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-        get: (createdAtVal) => dateFormat(createdAtVal)
-    },
-    size: {
-        type: String,
-        default: 'Large'
-    },
-    toppings: [],
-    comments: [
-        {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
-        }
-    ]
+pizzaName: {
+    type: String
+},
+createdBy: {
+    type: String
+},
+createdAt: {
+    type: Date,
+    default: Date.now,
+    get: (createdAtVal) => dateFormat(createdAtVal)
+},
+size: {
+    type: String,
+    default: 'Large'
+},
+toppings: [],
+comments: [
+    {
+    type: Schema.Types.ObjectId,
+    ref: 'Comment'
+    }
+]
 },
 {
-    toJSON: {
-        virtuals: true,
-        getters: true
-    },
-    id: false // virtual that mongoose returns by default. not needed in this case
+toJSON: {
+    virtuals: true,
+    getters: true
+},
+id: false // virtual that mongoose returns by default. not needed in this case
 }
 );
 
-// get total comment and reply count on retrieval
+// get total comment count and reply count on retrieval
 PizzaSchema.virtual('commentCount').get(function() {
-    return this.comments.length;
+return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 })
 
 // create the Pizza model using the PizzaSchema
