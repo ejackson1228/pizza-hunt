@@ -50,7 +50,7 @@ const pizzaController = {
 
     //update Pizza by ID
     updatePizza({ params, body }, res) {
-        Pizza.findOneAndUpdate({ _id: params.id }, body, { new: true }) // {new: true} tells mongoose to return the new updated document, rather than the original 
+        Pizza.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true }) // {new: true} tells mongoose to return the new updated document, rather than the original 
             .then(dbPizzaData => {
                 if (!dbPizzaData) {
                     res.status(404).json({ message: 'No Pizza found with that ID.'});
